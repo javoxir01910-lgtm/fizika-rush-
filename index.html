@@ -17,7 +17,7 @@
       background: var(--bg);
       margin: 0;
       padding: 12px;
-      padding-bottom: 270px;
+      padding-bottom: 280px;
       color: #1e293b;
     }
     .card {
@@ -120,7 +120,6 @@
       cursor: pointer;
     }
 
-    /* Klaviatura uslubi */
     #mathKeyboard {
       position: fixed;
       bottom: 0;
@@ -171,8 +170,8 @@
 <body>
 
 <div class="card" id="step1">
-  <div class="icon">📋</div>
-  <h2>Javoblarni tekshirish</h2>
+  <div class="icon" id="pageIcon">📋</div>
+  <h2 id="pageTitle">Javoblarni tekshirish</h2>
   <label>Test kodi</label>
   <input type="text" id="testCode" class="main-input" placeholder="Masalan: 275">
   <button class="btn" onclick="startTest()">Javoblarni kiritish</button>
@@ -190,7 +189,7 @@
   <label>36a - 45b yozma javoblar:</label>
   <div class="grid-written" id="grid36_45"></div>
 
-  <button class="btn" onclick="sendToTelegram()">Tekshirishga yuborish</button>
+  <button class="btn" id="submitBtn" onclick="sendToTelegram()">Tekshirishga yuborish</button>
 </div>
 
 <!-- Virtual Klaviatura -->
@@ -200,7 +199,6 @@
     <span style="color:#ef4444; cursor:pointer;" onclick="closeKeyboard()">Yopish ✕</span>
   </div>
 
-  <!-- 1. Standart ochiladigan ko'rinish: Raqamlar, Daraja va Belgilar -->
   <div class="kb-grid kb-grid-6" id="panel_symbols">
     <div class="kb-btn" onclick="pressKey('1')">1</div>
     <div class="kb-btn" onclick="pressKey('2')">2</div>
@@ -223,7 +221,6 @@
     <div class="kb-btn kb-action" onclick="pressKey('√')">√</div>
     <div class="kb-btn kb-action" onclick="pressKey('π')">π</div>
 
-    <!-- Bitta tugma orqali harflarga o'tish -->
     <div class="kb-btn kb-switch" onclick="toggleKeyboard('letters')">ABC</div>
     <div class="kb-btn" onclick="pressKey('0')">0</div>
     <div class="kb-btn" onclick="pressKey('.')">.</div>
@@ -232,7 +229,6 @@
     <div class="kb-btn kb-done" onclick="nextField()">➡</div>
   </div>
 
-  <!-- 2. Harflar ko'rinishi (ABC bosilganda ochiladi) -->
   <div class="kb-grid kb-grid-7" id="panel_letters" style="display: none;">
     <div class="kb-btn alpha-char" onclick="pressChar(this)">a</div>
     <div class="kb-btn alpha-char" onclick="pressChar(this)">b</div>
@@ -258,7 +254,6 @@
     <div class="kb-btn alpha-char" onclick="pressChar(this)">s</div>
     <div class="kb-btn alpha-char" onclick="pressChar(this)">t</div>
 
-    <!-- Bitta tugma orqali qaytib raqam/belgilarga o'tish -->
     <div class="kb-btn kb-switch" onclick="toggleKeyboard('symbols')">?123</div>
     <div class="kb-btn kb-action" id="shiftBtn" onclick="toggleShift()">⇧ Katta</div>
     <div class="kb-btn alpha-char" onclick="pressChar(this)">u</div>
@@ -272,6 +267,16 @@
 <script>
   const tg = window.Telegram?.WebApp;
   if(tg) tg.expand();
+
+  // Rejimni aniqlash (Admin yoki O'quvchi)
+  const urlParams = new URLSearchParams(window.location.search);
+  const isAdmin = urlParams.get('mode') === 'admin';
+
+  if (isAdmin) {
+    document.getElementById('pageTitle').innerText = "Test kalitlarini kiritish (Admin)";
+    document.getElementById('pageIcon').innerText = "🔑";
+    document.getElementById('submitBtn').innerText = "Kalitlarni saqlash 💾";
+  }
 
   const selectedAnswers = {};
   const writtenFields = [];
@@ -338,7 +343,6 @@
   function openKeyboard(id, label) {
     activeInput = document.getElementById(id);
     document.getElementById('activeInputLabel').innerText = `Savol: ${label}`;
-    // Har safar bosilganda standart raqam/belgilar paneli ochiladi
     toggleKeyboard('symbols');
     document.getElementById('mathKeyboard').style.display = 'block';
   }
@@ -348,7 +352,6 @@
     activeInput = null;
   }
 
-  // 1 ta tugma orqali belgilar va harflar o'rtasida almashish
   function toggleKeyboard(mode) {
     if (mode === 'letters') {
       document.getElementById('panel_symbols').style.display = 'none';
@@ -396,10 +399,12 @@
     const finalAnswers = { ...selectedAnswers };
     writtenFields.forEach(f => {
       const key = f.replace('q_', '');
-      finalAnswers[key] = document.getElementById(f).value.trim();
+      const val = document.getElementById(f).value.trim();
+      if(val) finalAnswers[key] = val;
     });
 
     const data = {
+      action: isAdmin ? 'save_keys' : 'submit_test',
       test_code: document.getElementById('testCode').value.trim(),
       answers: finalAnswers
     };
