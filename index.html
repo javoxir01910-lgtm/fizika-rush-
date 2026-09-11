@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Milliy Sertifikat Matematika</title>
+  <title>Milliy Sertifikat Fizika</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -16,21 +16,22 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
       margin: 0;
-      padding: 16px;
-      padding-bottom: 240px;
+      padding: 12px;
+      padding-bottom: 270px;
       color: #1e293b;
     }
     .card {
       background: var(--card);
-      border-radius: 20px;
-      padding: 24px;
+      border-radius: 18px;
+      padding: 18px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.05);
       max-width: 440px;
       margin: 0 auto;
     }
-    .icon { text-align: center; font-size: 44px; margin-bottom: 5px; }
-    h2, h3 { text-align: center; margin: 4px 0 16px; color: #0f172a; }
+    .icon { text-align: center; font-size: 40px; }
+    h2, h3 { text-align: center; margin: 4px 0 14px; color: #0f172a; }
     label { font-size: 13px; color: #475569; font-weight: bold; display: block; margin-top: 14px; margin-bottom: 6px; }
+    
     input.main-input {
       width: 100%;
       padding: 12px;
@@ -41,9 +42,10 @@
       outline: none;
     }
     input.main-input:focus { border-color: var(--primary); }
+
     .btn {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       background: var(--primary);
       color: #fff;
       border: none;
@@ -53,68 +55,116 @@
       cursor: pointer;
       margin-top: 18px;
     }
-    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .q-item {
+
+    .test-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      margin-bottom: 6px;
+    }
+    .q-num {
+      font-weight: bold;
+      font-size: 14px;
+      color: #334155;
+      width: 32px;
+    }
+    .opt-group { display: flex; gap: 6px; }
+    .opt-btn {
+      width: 34px;
+      height: 34px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      font-size: 13px;
+      font-weight: bold;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.15s;
+    }
+    .opt-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .grid-written {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .w-item {
       background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 6px 2px;
       text-align: center;
     }
-    .q-item span { font-size: 12px; font-weight: bold; color: #64748b; }
-    .q-item input {
-      width: 80%;
+    .w-item span { font-size: 12px; font-weight: bold; color: #64748b; }
+    .w-item input {
+      width: 85%;
       text-align: center;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
       padding: 6px 0;
-      font-size: 15px;
+      font-size: 13px;
       font-weight: bold;
       margin-top: 4px;
       background: #fff;
+      cursor: pointer;
     }
 
+    /* Klaviatura uslubi */
     #mathKeyboard {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: #f1f5f9;
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.12);
-      padding: 10px;
+      background: #e2e8f0;
+      box-shadow: 0 -4px 18px rgba(0,0,0,0.18);
+      padding: 8px 10px 14px;
       display: none;
       z-index: 1000;
+      user-select: none;
     }
     .kb-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: bold;
       font-size: 13px;
-      color: #334155;
+      color: #1e293b;
     }
     .kb-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 5px;
+      gap: 4px;
       max-width: 440px;
       margin: 0 auto;
     }
+    .kb-grid-6 { grid-template-columns: repeat(6, 1fr); }
+    .kb-grid-7 { grid-template-columns: repeat(7, 1fr); }
     .kb-btn {
       background: #ffffff;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
-      padding: 12px 0;
-      font-size: 18px;
+      padding: 10px 0;
+      font-size: 15px;
       font-weight: 600;
       color: #0f172a;
       cursor: pointer;
       text-align: center;
-      user-select: none;
     }
-    .kb-btn:active { background: #e2e8f0; }
-    .kb-action { background: #e2e8f0; font-size: 14px; }
+    .kb-btn:active { background: #cbd5e1; }
+    .kb-action { background: #f1f5f9; font-size: 12px; font-weight: bold; }
+    .kb-switch { background: #3b82f6; color: #fff; font-size: 13px; font-weight: bold; }
+    .kb-del { background: #fee2e2; color: #dc2626; font-size: 15px; }
     .kb-done { background: var(--primary); color: #fff; }
   </style>
 </head>
@@ -132,46 +182,90 @@
   <h3>Test kodi: <span id="displayCode" style="color:var(--primary);"></span></h3>
 
   <label>1 - 32 savollar (A, B, C, D):</label>
-  <div class="grid" id="grid1_32"></div>
+  <div id="list1_32"></div>
 
-  <label>33 - 35 savollar (Moslashtirish: A, B, C, D, E, F):</label>
-  <div class="grid" id="grid33_35"></div>
+  <label>33 - 35 savollar (A, B, C, D, E, F):</label>
+  <div id="list33_35"></div>
 
   <label>36a - 45b yozma javoblar:</label>
-  <div class="grid" id="grid36_45"></div>
+  <div class="grid-written" id="grid36_45"></div>
 
   <button class="btn" onclick="sendToTelegram()">Tekshirishga yuborish</button>
 </div>
 
+<!-- Virtual Klaviatura -->
 <div id="mathKeyboard">
   <div class="kb-header">
     <span id="activeInputLabel">Katakcha tanlang</span>
     <span style="color:#ef4444; cursor:pointer;" onclick="closeKeyboard()">Yopish ✕</span>
   </div>
-  <div class="kb-grid">
+
+  <!-- 1. Standart ochiladigan ko'rinish: Raqamlar, Daraja va Belgilar -->
+  <div class="kb-grid kb-grid-6" id="panel_symbols">
     <div class="kb-btn" onclick="pressKey('1')">1</div>
     <div class="kb-btn" onclick="pressKey('2')">2</div>
     <div class="kb-btn" onclick="pressKey('3')">3</div>
-    <div class="kb-btn" onclick="pressKey('+')">+</div>
-    <div class="kb-btn kb-action" onclick="pressKey('backspace')">⌫</div>
+    <div class="kb-btn kb-action" onclick="pressKey('+')">+</div>
+    <div class="kb-btn kb-action" onclick="pressKey('-')">-</div>
+    <div class="kb-btn kb-del" onclick="pressKey('backspace')">⌫</div>
 
     <div class="kb-btn" onclick="pressKey('4')">4</div>
     <div class="kb-btn" onclick="pressKey('5')">5</div>
     <div class="kb-btn" onclick="pressKey('6')">6</div>
-    <div class="kb-btn" onclick="pressKey('-')">-</div>
-    <div class="kb-btn" onclick="pressKey('/')">/</div>
+    <div class="kb-btn kb-action" onclick="pressKey('·')">·</div>
+    <div class="kb-btn kb-action" onclick="pressKey('/')">/</div>
+    <div class="kb-btn kb-action" onclick="pressKey('^')">xʸ</div>
 
     <div class="kb-btn" onclick="pressKey('7')">7</div>
     <div class="kb-btn" onclick="pressKey('8')">8</div>
     <div class="kb-btn" onclick="pressKey('9')">9</div>
-    <div class="kb-btn" onclick="pressKey('.')">.</div>
-    <div class="kb-btn" onclick="pressKey('√')">√</div>
+    <div class="kb-btn kb-action" onclick="pressKey('^2')">x²</div>
+    <div class="kb-btn kb-action" onclick="pressKey('√')">√</div>
+    <div class="kb-btn kb-action" onclick="pressKey('π')">π</div>
 
-    <div class="kb-btn" onclick="pressKey('π')">π</div>
+    <!-- Bitta tugma orqali harflarga o'tish -->
+    <div class="kb-btn kb-switch" onclick="toggleKeyboard('letters')">ABC</div>
     <div class="kb-btn" onclick="pressKey('0')">0</div>
-    <div class="kb-btn" onclick="pressKey('(')">(</div>
-    <div class="kb-btn" onclick="pressKey(')')">)</div>
+    <div class="kb-btn" onclick="pressKey('.')">.</div>
+    <div class="kb-btn kb-action" onclick="pressKey('(')">(</div>
+    <div class="kb-btn kb-action" onclick="pressKey(')')">)</div>
     <div class="kb-btn kb-done" onclick="nextField()">➡</div>
+  </div>
+
+  <!-- 2. Harflar ko'rinishi (ABC bosilganda ochiladi) -->
+  <div class="kb-grid kb-grid-7" id="panel_letters" style="display: none;">
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">a</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">b</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">c</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">d</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">e</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">f</div>
+    <div class="kb-btn kb-del" onclick="pressKey('backspace')">⌫</div>
+
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">g</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">h</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">i</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">j</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">k</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">l</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">m</div>
+
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">n</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">o</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">p</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">q</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">r</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">s</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">t</div>
+
+    <!-- Bitta tugma orqali qaytib raqam/belgilarga o'tish -->
+    <div class="kb-btn kb-switch" onclick="toggleKeyboard('symbols')">?123</div>
+    <div class="kb-btn kb-action" id="shiftBtn" onclick="toggleShift()">⇧ Katta</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">u</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">v</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">x</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">y</div>
+    <div class="kb-btn alpha-char" onclick="pressChar(this)">z</div>
   </div>
 </div>
 
@@ -179,30 +273,58 @@
   const tg = window.Telegram?.WebApp;
   if(tg) tg.expand();
 
-  let activeInput = null;
+  const selectedAnswers = {};
   const writtenFields = [];
+  let activeInput = null;
+  let isUpperCase = false;
 
-  const g1 = document.getElementById('grid1_32');
-  for(let i = 1; i <= 32; i++) {
-    g1.innerHTML += `<div class="q-item"><span>${i}</span><br><input maxlength="1" id="q_${i}" oninput="this.value=this.value.toUpperCase()"></div>`;
+  const l1 = document.getElementById('list1_32');
+  for (let i = 1; i <= 32; i++) {
+    l1.innerHTML += `
+      <div class="test-row">
+        <div class="q-num">${i}.</div>
+        <div class="opt-group">
+          ${['A', 'B', 'C', 'D'].map(opt => `
+            <button type="button" class="opt-btn" id="btn_${i}_${opt}" onclick="selectOption('${i}', '${opt}', ['A','B','C','D'])">${opt}</button>
+          `).join('')}
+        </div>
+      </div>`;
   }
 
-  const g2 = document.getElementById('grid33_35');
-  for(let i = 33; i <= 35; i++) {
-    g2.innerHTML += `<div class="q-item"><span>${i}</span><br><input maxlength="1" id="q_${i}" oninput="this.value=this.value.toUpperCase()"></div>`;
+  const l2 = document.getElementById('list33_35');
+  for (let i = 33; i <= 35; i++) {
+    l2.innerHTML += `
+      <div class="test-row">
+        <div class="q-num">${i}.</div>
+        <div class="opt-group">
+          ${['A', 'B', 'C', 'D', 'E', 'F'].map(opt => `
+            <button type="button" class="opt-btn" id="btn_${i}_${opt}" onclick="selectOption('${i}', '${opt}', ['A','B','C','D','E','F'])">${opt}</button>
+          `).join('')}
+        </div>
+      </div>`;
   }
 
   const g3 = document.getElementById('grid36_45');
-  for(let i = 36; i <= 45; i++) {
+  for (let i = 36; i <= 45; i++) {
     ['a', 'b'].forEach(part => {
       const fieldId = `q_${i}${part}`;
       writtenFields.push(fieldId);
       g3.innerHTML += `
-        <div class="q-item">
+        <div class="w-item">
           <span>${i}${part}</span><br>
           <input readonly id="${fieldId}" onclick="openKeyboard('${fieldId}', '${i}${part}')">
         </div>`;
     });
+  }
+
+  function selectOption(qNum, val, allOptions) {
+    allOptions.forEach(opt => {
+      const b = document.getElementById(`btn_${qNum}_${opt}`);
+      if(b) b.classList.remove('active');
+    });
+    const currentBtn = document.getElementById(`btn_${qNum}_${val}`);
+    if(currentBtn) currentBtn.classList.add('active');
+    selectedAnswers[qNum] = val;
   }
 
   function startTest() {
@@ -216,12 +338,37 @@
   function openKeyboard(id, label) {
     activeInput = document.getElementById(id);
     document.getElementById('activeInputLabel').innerText = `Savol: ${label}`;
+    // Har safar bosilganda standart raqam/belgilar paneli ochiladi
+    toggleKeyboard('symbols');
     document.getElementById('mathKeyboard').style.display = 'block';
   }
 
   function closeKeyboard() {
     document.getElementById('mathKeyboard').style.display = 'none';
     activeInput = null;
+  }
+
+  // 1 ta tugma orqali belgilar va harflar o'rtasida almashish
+  function toggleKeyboard(mode) {
+    if (mode === 'letters') {
+      document.getElementById('panel_symbols').style.display = 'none';
+      document.getElementById('panel_letters').style.display = 'grid';
+    } else {
+      document.getElementById('panel_letters').style.display = 'none';
+      document.getElementById('panel_symbols').style.display = 'grid';
+    }
+  }
+
+  function toggleShift() {
+    isUpperCase = !isUpperCase;
+    document.querySelectorAll('.alpha-char').forEach(btn => {
+      btn.innerText = isUpperCase ? btn.innerText.toUpperCase() : btn.innerText.toLowerCase();
+    });
+    document.getElementById('shiftBtn').innerText = isUpperCase ? '⇩ Kichik' : '⇧ Katta';
+  }
+
+  function pressChar(btn) {
+    pressKey(btn.innerText);
   }
 
   function pressKey(val) {
@@ -246,18 +393,16 @@
   }
 
   function sendToTelegram() {
-    const data = {
-      test_code: document.getElementById('testCode').value.trim(),
-      answers: {}
-    };
-
-    for(let i = 1; i <= 35; i++) {
-      data.answers[i.toString()] = document.getElementById(`q_${i}`).value.trim();
-    }
+    const finalAnswers = { ...selectedAnswers };
     writtenFields.forEach(f => {
       const key = f.replace('q_', '');
-      data.answers[key] = document.getElementById(f).value.trim();
+      finalAnswers[key] = document.getElementById(f).value.trim();
     });
+
+    const data = {
+      test_code: document.getElementById('testCode').value.trim(),
+      answers: finalAnswers
+    };
 
     if(tg) {
       tg.sendData(JSON.stringify(data));
