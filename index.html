@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Milliy Sertifikat Matematika</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --bg: #dceafc;
+      --card: #ffffff;
+      --border: #cbd5e1;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 16px;
+      padding-bottom: 240px;
+      color: #1e293b;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .icon { text-align: center; font-size: 44px; margin-bottom: 5px; }
+    h2, h3 { text-align: center; margin: 4px 0 16px; color: #0f172a; }
+    label { font-size: 13px; color: #475569; font-weight: bold; display: block; margin-top: 14px; margin-bottom: 6px; }
+    input.main-input {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      box-sizing: border-box;
+      font-size: 16px;
+      outline: none;
+    }
+    input.main-input:focus { border-color: var(--primary); }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 18px;
+    }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .q-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 2px;
+      text-align: center;
+    }
+    .q-item span { font-size: 12px; font-weight: bold; color: #64748b; }
+    .q-item input {
+      width: 80%;
+      text-align: center;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 0;
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 4px;
+      background: #fff;
+    }
+
+    #mathKeyboard {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #f1f5f9;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.12);
+      padding: 10px;
+      display: none;
+      z-index: 1000;
+    }
+    .kb-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 13px;
+      color: #334155;
+    }
+    .kb-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .kb-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 12px 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #0f172a;
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
+    }
+    .kb-btn:active { background: #e2e8f0; }
+    .kb-action { background: #e2e8f0; font-size: 14px; }
+    .kb-done { background: var(--primary); color: #fff; }
+  </style>
+</head>
+<body>
+
+<div class="card" id="step1">
+  <div class="icon">📋</div>
+  <h2>Javoblarni tekshirish</h2>
+  <label>Test kodi</label>
+  <input type="text" id="testCode" class="main-input" placeholder="Masalan: 275">
+  <button class="btn" onclick="startTest()">Javoblarni kiritish</button>
+</div>
+
+<div class="card" id="step2" style="display: none;">
+  <h3>Test kodi: <span id="displayCode" style="color:var(--primary);"></span></h3>
+
+  <label>1 - 32 savollar (A, B, C, D):</label>
+  <div class="grid" id="grid1_32"></div>
+
+  <label>33 - 35 savollar (Moslashtirish: A, B, C, D, E, F):</label>
+  <div class="grid" id="grid33_35"></div>
+
+  <label>36a - 45b yozma javoblar:</label>
+  <div class="grid" id="grid36_45"></div>
+
+  <button class="btn" onclick="sendToTelegram()">Tekshirishga yuborish</button>
+</div>
+
+<div id="mathKeyboard">
+  <div class="kb-header">
+    <span id="activeInputLabel">Katakcha tanlang</span>
+    <span style="color:#ef4444; cursor:pointer;" onclick="closeKeyboard()">Yopish ✕</span>
+  </div>
+  <div class="kb-grid">
+    <div class="kb-btn" onclick="pressKey('1')">1</div>
+    <div class="kb-btn" onclick="pressKey('2')">2</div>
+    <div class="kb-btn" onclick="pressKey('3')">3</div>
+    <div class="kb-btn" onclick="pressKey('+')">+</div>
+    <div class="kb-btn kb-action" onclick="pressKey('backspace')">⌫</div>
+
+    <div class="kb-btn" onclick="pressKey('4')">4</div>
+    <div class="kb-btn" onclick="pressKey('5')">5</div>
+    <div class="kb-btn" onclick="pressKey('6')">6</div>
+    <div class="kb-btn" onclick="pressKey('-')">-</div>
+    <div class="kb-btn" onclick="pressKey('/')">/</div>
+
+    <div class="kb-btn" onclick="pressKey('7')">7</div>
+    <div class="kb-btn" onclick="pressKey('8')">8</div>
+    <div class="kb-btn" onclick="pressKey('9')">9</div>
+    <div class="kb-btn" onclick="pressKey('.')">.</div>
+    <div class="kb-btn" onclick="pressKey('√')">√</div>
+
+    <div class="kb-btn" onclick="pressKey('π')">π</div>
+    <div class="kb-btn" onclick="pressKey('0')">0</div>
+    <div class="kb-btn" onclick="pressKey('(')">(</div>
+    <div class="kb-btn" onclick="pressKey(')')">)</div>
+    <div class="kb-btn kb-done" onclick="nextField()">➡</div>
+  </div>
+</div>
+
+<script>
+  const tg = window.Telegram?.WebApp;
+  if(tg) tg.expand();
+
+  let activeInput = null;
+  const writtenFields = [];
+
+  const g1 = document.getElementById('grid1_32');
+  for(let i = 1; i <= 32; i++) {
+    g1.innerHTML += `<div class="q-item"><span>${i}</span><br><input maxlength="1" id="q_${i}" oninput="this.value=this.value.toUpperCase()"></div>`;
+  }
+
+  const g2 = document.getElementById('grid33_35');
+  for(let i = 33; i <= 35; i++) {
+    g2.innerHTML += `<div class="q-item"><span>${i}</span><br><input maxlength="1" id="q_${i}" oninput="this.value=this.value.toUpperCase()"></div>`;
+  }
+
+  const g3 = document.getElementById('grid36_45');
+  for(let i = 36; i <= 45; i++) {
+    ['a', 'b'].forEach(part => {
+      const fieldId = `q_${i}${part}`;
+      writtenFields.push(fieldId);
+      g3.innerHTML += `
+        <div class="q-item">
+          <span>${i}${part}</span><br>
+          <input readonly id="${fieldId}" onclick="openKeyboard('${fieldId}', '${i}${part}')">
+        </div>`;
+    });
+  }
+
+  function startTest() {
+    const code = document.getElementById('testCode').value.trim();
+    if(!code) return alert("Iltimos, test kodini kiriting!");
+    document.getElementById('displayCode').innerText = code;
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'block';
+  }
+
+  function openKeyboard(id, label) {
+    activeInput = document.getElementById(id);
+    document.getElementById('activeInputLabel').innerText = `Savol: ${label}`;
+    document.getElementById('mathKeyboard').style.display = 'block';
+  }
+
+  function closeKeyboard() {
+    document.getElementById('mathKeyboard').style.display = 'none';
+    activeInput = null;
+  }
+
+  function pressKey(val) {
+    if(!activeInput) return;
+    if(val === 'backspace') {
+      activeInput.value = activeInput.value.slice(0, -1);
+    } else {
+      activeInput.value += val;
+    }
+  }
+
+  function nextField() {
+    if(!activeInput) return;
+    const currIdx = writtenFields.indexOf(activeInput.id);
+    if(currIdx !== -1 && currIdx < writtenFields.length - 1) {
+      const nextId = writtenFields[currIdx + 1];
+      const nextLabel = nextId.replace('q_', '');
+      openKeyboard(nextId, nextLabel);
+    } else {
+      closeKeyboard();
+    }
+  }
+
+  function sendToTelegram() {
+    const data = {
+      test_code: document.getElementById('testCode').value.trim(),
+      answers: {}
+    };
+
+    for(let i = 1; i <= 35; i++) {
+      data.answers[i.toString()] = document.getElementById(`q_${i}`).value.trim();
+    }
+    writtenFields.forEach(f => {
+      const key = f.replace('q_', '');
+      data.answers[key] = document.getElementById(f).value.trim();
+    });
+
+    if(tg) {
+      tg.sendData(JSON.stringify(data));
+    }
+  }
+</script>
+</body>
+</html>
